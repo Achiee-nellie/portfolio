@@ -1,0 +1,68 @@
+# 💼 Nelian Achieng' Portfolio Website
+
+Welcome to my personal developer portfolio! This is a responsive and interactive website built using **HTML** and **CSS**, designed to showcase my skills,interests, projects, education, and contact information.
+
+## 🌟 Live Demo
+
+👉 [Visit the Live Site](https://illustrious-beignet-e768e7.netlify.app/)
+
+---
+
+## 📌 Features
+
+- Smooth scrolling and scroll-triggered animations
+- Fully responsive design for mobile and desktop
+- Sections include: Home, About, Skills, Education, Projects, and Contact
+- Modern CSS techniques like Flexbox, Grid, and animations
+- Custom styling with variables and a gradient theme
+- Interactive contact form (non-functional; placeholder action)
+
+---
+
+## 🛠️ Technologies Used
+
+- HTML5
+- CSS3 (Vanilla, No Frameworks)
+- SVG for background grain effect
+- CSS Animations and Transitions
+- Responsive Design Principles
+
+---
+
+## 🚀 Projects Showcased
+
+- **Task Management App** – Built with React & Firebase  
+  [GitHub Repo](https://github.com/Achiee-nellie/Task-Management-App)
+
+- **Weather Dashboard** – Integrated with external weather APIs  
+  [GitHub Repo](https://github.com/Achiee-nellie/weather-dashboard)
+
+- **Portfolio Website** – This current site you're viewing  
+  [GitHub Repo](https://github.com/Achiee-nellie/portfolio)
+
+---
+
+## 📂 How to Use Locally
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Achiee-nellie/portfolio.git
+   cd portfolio
+
+Open the index.html file in your browser:
+start index.html  # Windows
+open index.html   # macOS
+
+📧 Contact
+Email: nelianachieng319@gmail.com
+
+Phone: +254 793 855 648
+
+LinkedIn: nelian-achieng
+
+GitHub: Achiee-nellie
+
+🔖 License
+This project is open-source and available under the MIT License.
+
+© 2025 Nelian Achieng' — Built with ❤️ and lots of ☕
