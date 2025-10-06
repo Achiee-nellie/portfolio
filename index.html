@@ -30,9 +30,20 @@
             overflow-x: hidden;
         }
 
-        /* Smooth scrolling */
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: var(--gradient);
+            z-index: 10000;
+            transition: width 0.1s ease;
         }
 
         /* Navigation */
@@ -46,6 +57,11 @@
             padding: 1rem 0;
             transition: all 0.3s ease;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
         }
 
         .nav-container {
@@ -64,6 +80,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            cursor: pointer;
         }
 
         .nav-links {
@@ -80,7 +97,7 @@
             position: relative;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: var(--primary-color);
         }
 
@@ -95,8 +112,17 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover::after {
+        .nav-links a:hover::after, .nav-links a.active::after {
             width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
         }
 
         /* Hero Section */
@@ -109,15 +135,26 @@
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
+        .hero-particles {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float-particle 15s infinite;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(100px, -100px); }
+            50% { transform: translate(-50px, -200px); }
+            75% { transform: translate(150px, -150px); }
         }
 
         .hero-content {
@@ -140,27 +177,29 @@
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            animation: fadeInUp 1s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
         }
 
         .hero-text .subtitle {
             font-size: 1.5rem;
             margin-bottom: 2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease 0.2s both;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
         }
 
         .hero-text p {
             font-size: 1.1rem;
             margin-bottom: 2rem;
-            opacity: 0.8;
-            animation: fadeInUp 1s ease 0.4s both;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.4s forwards;
         }
 
         .cta-buttons {
             display: flex;
             gap: 1rem;
-            animation: fadeInUp 1s ease 0.6s both;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
         }
 
         .btn {
@@ -217,11 +256,37 @@
             border-radius: 50%;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             margin: 0 auto 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Sections */
         section {
             padding: 5rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .container {
@@ -236,9 +301,6 @@
             font-weight: 700;
             margin-bottom: 3rem;
             position: relative;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease forwards;
         }
 
         .section-title::after {
@@ -272,18 +334,13 @@
             border-radius: 20px;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease 0.2s forwards;
         }
 
-        .about-text {
+        .about-text p {
             font-size: 1.1rem;
             line-height: 1.8;
             color: var(--text-secondary);
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease 0.4s forwards;
+            margin-bottom: 1.5rem;
         }
 
         /* Skills Section */
@@ -303,17 +360,8 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease forwards;
+            cursor: pointer;
         }
-
-        .skill-card:nth-child(1) { animation-delay: 0.1s; }
-        .skill-card:nth-child(2) { animation-delay: 0.2s; }
-        .skill-card:nth-child(3) { animation-delay: 0.3s; }
-        .skill-card:nth-child(4) { animation-delay: 0.4s; }
-        .skill-card:nth-child(5) { animation-delay: 0.5s; }
-        .skill-card:nth-child(6) { animation-delay: 0.6s; }
 
         .skill-card::before {
             content: '';
@@ -332,7 +380,7 @@
         }
 
         .skill-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) scale(1.02);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
@@ -347,6 +395,32 @@
             justify-content: center;
             font-size: 1.5rem;
             color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover .skill-icon {
+            transform: rotateY(360deg);
+        }
+
+        .skill-progress {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .skill-progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 10px;
+            transition: width 1s ease;
+            width: 0;
+        }
+
+        .skill-card.visible .skill-progress-bar {
+            width: var(--progress);
         }
 
         /* Education Section */
@@ -362,13 +436,12 @@
             margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease forwards;
+            transition: transform 0.3s ease;
         }
 
-        .education-card:nth-child(2) { animation-delay: 0.2s; }
-        .education-card:nth-child(3) { animation-delay: 0.4s; }
+        .education-card:hover {
+            transform: translateX(10px);
+        }
 
         .education-card::before {
             content: '';
@@ -410,18 +483,11 @@
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease forwards;
+            cursor: pointer;
         }
 
-        .project-card:nth-child(1) { animation-delay: 0.1s; }
-        .project-card:nth-child(2) { animation-delay: 0.2s; }
-        .project-card:nth-child(3) { animation-delay: 0.3s; }
-        .project-card:nth-child(4) { animation-delay: 0.4s; }
-
         .project-card:hover {
-            transform: translateY(-10px) rotateY(2deg);
+            transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
@@ -430,6 +496,25 @@
             height: 200px;
             background: var(--gradient);
             position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::after {
+            content: 'View Details';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover .project-image::after {
+            opacity: 1;
         }
 
         .project-content {
@@ -475,20 +560,11 @@
             gap: 4rem;
         }
 
-        .contact-info {
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease 0.2s forwards;
-        }
-
         .contact-form {
             background: rgba(255, 255, 255, 0.1);
             padding: 2rem;
             border-radius: 15px;
             backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(50px);
-            animation: reveal 0.8s ease 0.4s forwards;
         }
 
         .form-group {
@@ -510,7 +586,7 @@
             background: rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .form-group input:focus,
@@ -518,11 +594,7 @@
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            transform: translateY(-2px);
         }
 
         .submit-btn {
@@ -534,6 +606,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
         }
 
         .submit-btn:hover {
@@ -541,14 +614,8 @@
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
         }
 
-        .contact-info h3 {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .contact-info p {
-            margin-bottom: 1rem;
-            opacity: 0.8;
+        .submit-btn:active {
+            transform: translateY(0);
         }
 
         /* Footer */
@@ -580,8 +647,38 @@
         }
 
         .social-link:hover {
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.1);
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
         }
 
         /* Animations */
@@ -597,61 +694,26 @@
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
 
-        @keyframes reveal {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* Scroll Progress Bar */
-        .progress-bar {
+        /* Toast Notification */
+        .toast {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            z-index: 9999;
-            animation: progress-grow 1s ease-out;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10001;
+            transition: bottom 0.3s ease;
         }
 
-        @keyframes progress-grow {
-            from { width: 0%; }
-            to { width: 100%; }
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-
-        /* Mobile menu checkbox hack */
-        #mobile-menu-toggle {
-            display: none;
+        .toast.show {
+            bottom: 30px;
         }
 
         /* Responsive Design */
@@ -675,7 +737,7 @@
                 pointer-events: none;
             }
             
-            #mobile-menu-toggle:checked ~ .nav-container .nav-links {
+            .nav-links.active {
                 transform: translateY(0);
                 opacity: 1;
                 pointer-events: auto;
@@ -717,104 +779,31 @@
                 text-align: center;
             }
         }
-
-        /* Additional hover effects */
-        .btn:hover {
-            animation: pulse 0.6s ease-in-out;
-        }
-
-        .skill-card:hover {
-            animation: pulse 0.6s ease-in-out;
-        }
-
-        /* Gradient text effects */
-        .gradient-text {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Loading animation */
-        body {
-            opacity: 0;
-            animation: fadeIn 0.5s ease 0.1s forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Enhanced focus states for accessibility */
-        .btn:focus,
-        .nav-links a:focus,
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .submit-btn:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* Parallax effect simulation */
-        .hero {
-            background-attachment: fixed;
-            background-size: cover;
-            background-position: center;
-        }
-
-        /* Enhanced card shadows on hover */
-        .skill-card:hover,
-        .project-card:hover,
-        .education-card:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Typing effect simulation */
-        .subtitle {
-            overflow: hidden;
-            border-right: 2px solid rgba(255, 255, 255, 0.7);
-            white-space: nowrap;
-            animation: typing 3s steps(40, end) 0.5s forwards, blink-caret 0.75s step-end infinite;
-            width: 0;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: rgba(255, 255, 255, 0.7); }
-        }
     </style>
 </head>
 <body>
-    <!-- Progress Bar -->
-    <div class="progress-bar"></div>
-    
-    <!-- Mobile Menu Toggle -->
-    <input type="checkbox" id="mobile-menu-toggle">
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress"></div>
     
     <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-container">
             <div class="logo">Nelian Achieng'</div>
-            <label for="mobile-menu-toggle" class="mobile-menu-btn">☰</label>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#education" class="nav-link">Education</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <div class="hero-particles" id="particles"></div>
         <div class="hero-content">
             <div class="hero-text">
                 <h1>Hi, I'm Nelian Achieng'</h1>
@@ -840,13 +829,10 @@
         <div class="container">
             <h2 class="section-title">About Me</h2>
             <div class="about-content">
-                <div class="about-image">
-                
-                   <img src="Nellie.jpeg" alt="Nellie's Photo" width="400">
-
-                </div>
+                <div class="about-image"></div>
+                 <img src="Nellie.jpeg" alt="Nellie's Photo" width="400">
                 <div class="about-text">
-                    <p>Hello! I'm Nelian, a passionate web developer  creating digital solutions that make a difference. My journey in tech started with curiosity and has evolved into a deep love for crafting elegant, user-centered experiences.</p>
+                    <p>Hello! I'm Nelian, a passionate web developer creating digital solutions that make a difference. My journey in tech started with curiosity and has evolved into a deep love for crafting elegant, user-centered experiences.</p>
                     
                     <p>I believe that great software isn't just about clean code—it's about understanding users, solving problems, and creating something that truly matters. Whether I'm building a responsive website, developing a complex web application, or designing an intuitive user interface, I approach each project with creativity, attention to detail, and a commitment to excellence.</p>
                     
@@ -861,35 +847,53 @@
         <div class="container">
             <h2 class="section-title">Programming Languages & Skills</h2>
             <div class="skills-grid">
-                <div class="skill-card">
+                <div class="skill-card" data-progress="90">
                     <div class="skill-icon">🌐</div>
                     <h3>HTML & CSS</h3>
-                    <p>Semantic markup and modern CSS with Flexbox, Grid, and animations. Creating responsive, accessible web experiences.</p>
+                    <p>Semantic markup and modern CSS with Flexbox, Grid, and animations.</p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar" style="--progress: 90%"></div>
+                    </div>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-progress="85">
                     <div class="skill-icon">⚡</div>
                     <h3>JavaScript</h3>
-                    <p>ES6+, DOM manipulation, async programming, and modern frameworks. Building interactive and dynamic web applications.</p>
+                    <p>ES6+, DOM manipulation, and modern frameworks.</p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar" style="--progress: 85%"></div>
+                    </div>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-progress="80">
                     <div class="skill-icon">⚛️</div>
                     <h3>React</h3>
-                    <p>Component-based development, hooks, state management, and ecosystem tools. Creating scalable frontend applications.</p>
+                    <p>Component-based development and state management.</p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar" style="--progress: 80%"></div>
+                    </div>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-progress="75">
                     <div class="skill-icon">🐍</div>
                     <h3>Python</h3>
-                    <p>Backend development with Django/Flask, data analysis, and automation. Building robust server-side applications.</p>
+                    <p>Backend development and data analysis.</p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar" style="--progress: 75%"></div>
+                    </div>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-progress="70">
                     <div class="skill-icon">🗄️</div>
                     <h3>Database</h3>
-                    <p>SQL, PostgreSQL, MongoDB. Designing efficient database schemas and optimizing query performance.</p>
+                    <p>SQL, PostgreSQL, and MongoDB.</p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar" style="--progress: 70%"></div>
+                    </div>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card" data-progress="85">
                     <div class="skill-icon">🎨</div>
                     <h3>UI/UX Design</h3>
-                    <p>User research, wireframing, prototyping, and design systems. Creating intuitive and engaging user experiences.</p>
+                    <p>Creating intuitive user experiences.</p>
+                    <div class="skill-progress">
+                        <div class="skill-progress-bar" style="--progress: 85%"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -900,47 +904,16 @@
         <div class="container">
             <h2 class="section-title">Educational Background</h2>
             <div class="education-card">
-               <h3>Bachelor of Science in Computer Science</h3>
-               <h4>University of Embu • 2021 – 2025</h4>
-               <p>Final-year student specializing in Software Engineering and Human-Computer Interaction. Actively engaged in building scalable web applications and enhancing user experiences through thoughtful design. Led a final-year capstone project titled <em>"AI-Powered Web Accessibility Tools"</em>, recognized with the Departmental Innovation Award for its impact on inclusive design.</p>
-               <p><strong>Key Coursework:</strong> Data Structures and Algorithms, Software Engineering, Relational Databases, Full-Stack Web Development, Mobile App Development, Machine Learning, UI/UX Principles</p>
-
+                <h3>Bachelor of Science in Computer Science</h3>
+                <h4>University of Embu • 2021 – 2025</h4>
+                <p>Computer scientist specializing in Software Engineering,cybersecurity and Human-Computer Interaction.</p>
                 <a href="Nelian_Achieng_CV.pdf" class="cv-download">📄 Download My CV</a>
             </div>
             
             <div class="education-card">
-               <h3>PLP Academy - Software Engineering</h3>
-               <p><strong>Power Learn Project</strong></p>
-               <p>Currently enrolled in an intensive software engineering program, mastering modern frameworks and industry best practices.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interests Section -->
-    <section id="interests" class="skills">
-        <div class="container">
-            <h2 class="section-title">Tech Interests & Passions</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">🚀</div>
-                    <h3>Web Innovation</h3>
-                    <p>Exploring cutting-edge web technologies like WebAssembly, Progressive Web Apps, and modern CSS features to push the boundaries of what's possible on the web.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🤖</div>
-                    <h3>AI Integration</h3>
-                    <p>Fascinated by integrating AI and machine learning into web applications to create smarter, more personalized user experiences.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">♿</div>
-                    <h3>Accessibility</h3>
-                    <p>Passionate about creating inclusive web experiences that work for everyone, regardless of their abilities or the technology they use.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🌍</div>
-                    <h3>Open Source</h3>
-                    <p>Active contributor to open-source projects and believer in the power of collaborative development to solve global challenges.</p>
-                </div>
+                <h3>PLP Academy - Software Engineering</h3>
+                <p><strong>Power Learn Project</strong></p>
+                <p>Intensive software engineering program, mastering modern frameworks.</p>
             </div>
         </div>
     </section>
@@ -954,7 +927,7 @@
                     <div class="project-image"></div>
                     <div class="project-content">
                         <h3 class="project-title">Task Management App</h3>
-                        <p>A collaborative project management tool with real-time updates, drag-and-drop functionality, and team collaboration features. Built with React and Firebase.</p>
+                        <p>A collaborative project management tool with real-time updates and team collaboration features.</p>
                         <div class="project-links">
                             <a href="https://github.com/Achiee-nellie/Task-Management-App" class="project-link">GitHub</a>
                         </div>
@@ -965,7 +938,7 @@
                     <div class="project-image"></div>
                     <div class="project-content">
                         <h3 class="project-title">Weather Dashboard</h3>
-                        <p>An interactive weather application with location-based forecasts, historical data visualization, and severe weather alerts. Integrated with multiple weather APIs.</p>
+                        <p>An interactive weather application with location-based forecasts and data visualization.</p>
                         <div class="project-links">
                             <a href="https://github.com/Achiee-nellie/weather-dashboard" class="project-link">GitHub</a>
                         </div>
@@ -976,7 +949,7 @@
                     <div class="project-image"></div>
                     <div class="project-content">
                         <h3 class="project-title">Portfolio Website</h3>
-                        <p>This very portfolio you're viewing! A responsive, animated showcase built with vanilla HTML and CSS. Features smooth scrolling and scroll-triggered animations.</p>
+                        <p>A responsive, animated showcase built with HTML, CSS, and JavaScript.</p>
                         <div class="project-links">
                             <a href="https://illustrious-beignet-e768e7.netlify.app/" class="project-link">Live Demo</a>
                             <a href="https://github.com/Achiee-nellie/portfolio" class="project-link">GitHub</a>
@@ -994,17 +967,15 @@
             <div class="contact-content">
                 <div class="contact-info">
                     <h3>Get In Touch</h3>
-                    <p>I'm always excited to discuss new opportunities, collaborate on interesting projects, or just chat about technology. Whether you're a potential employer, fellow developer, or have an exciting project in mind, I'd love to hear from you!</p>
+                    <p>I'm always excited to discuss new opportunities and collaborate on interesting projects.</p>
                     
-                    <p><strong>📧 Email:</strong> nelianachieng319@mail.com</p>
-                    <p><strong>📱 Phone:</strong> +254 793 855  648</p>
+                    <p><strong>📧 Email:</strong> nelianachieng319@gmail.com</p>
+                    <p><strong>📱 Phone:</strong> +254 793 855 648/+254 701 554 900</p>
                     <p><strong>📍 Location:</strong> Nairobi, Kenya</p>
                     <p><strong>⏰ Response Time:</strong> Usually within 24 hours</p>
-                    
-                    <p>Feel free to reach out through any channel that works best for you. I'm looking forward to connecting and potentially working together on something amazing!</p>
                 </div>
                 
-                <form class="contact-form" method="POST" action="#contact">
+                <form class="contact-form" id="contact-form">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" placeholder="Your full name" required>
@@ -1022,7 +993,7 @@
                     
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or just say hello!" required></textarea>
+                        <textarea id="message" name="message" rows="5" placeholder="Tell me about your project!" required></textarea>
                     </div>
                     
                     <button type="submit" class="submit-btn">Send Message</button>
@@ -1038,11 +1009,328 @@
                 <a href="https://github.com/Achiee-nellie" class="social-link" title="GitHub">🐙</a>
                 <a href="https://www.linkedin.com/in/nelian-achieng-bbb0b9273/" class="social-link" title="LinkedIn">💼</a>
                 <a href="https://twitter.com/achiee456" class="social-link" title="Twitter">🐦</a>
-                <a href="nelianachieng319@gmail.com" class="social-link" title="Email">📧</a>
+                <a href="mailto:nelianachieng319@gmail.com" class="social-link" title="Email">📧</a>
             </div>
             <p>&copy; 2025 Nelian Achieng'. Crafted with ❤️ and lots of ☕</p>
-            <p>Built with pure HTML & CSS .</p>
+            <p>Built with HTML, CSS & JavaScript</p>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="back-to-top">↑</div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.querySelector('.scroll-progress');
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (window.scrollY / scrollHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Active Navigation Link on Scroll
+        const sections = document.querySelectorAll('section');
+        const navLinksAll = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinksAll.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Navbar background on scroll
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Section Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Skill Cards Animation
+        const skillCards = document.querySelectorAll('.skill-card');
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        skillCards.forEach(card => {
+            skillObserver.observe(card);
+        });
+
+        // Create Floating Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Back to Top Button
+        const backToTopBtn = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Contact Form Submission
+        const contactForm = document.getElementById('contact-form');
+        const toast = document.getElementById('toast');
+
+        function showToast(message, duration = 3000) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            // Simulate form submission
+            const submitBtn = contactForm.querySelector('.submit-btn');
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                showToast('✅ Message sent successfully! I\'ll get back to you soon.');
+                contactForm.reset();
+                submitBtn.textContent = 'Send Message';
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+
+        // Smooth Scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Project Card Click Animation
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('project-link')) {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                }
+            });
+        });
+
+        // Typing Effect for Subtitle (enhanced)
+        const subtitle = document.querySelector('.subtitle');
+        const text = subtitle.textContent;
+        subtitle.textContent = '';
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                subtitle.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        setTimeout(typeWriter, 1000);
+
+        // Add cursor blink effect
+        setInterval(() => {
+            subtitle.style.borderRight = subtitle.style.borderRight === '2px solid transparent' 
+                ? '2px solid rgba(255, 255, 255, 0.7)' 
+                : '2px solid transparent';
+        }, 500);
+
+        // Parallax Effect for Hero Section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const hero = document.querySelector('.hero');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add hover sound effect simulation (visual feedback)
+        document.querySelectorAll('.btn, .skill-card, .project-card').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            });
+        });
+
+        // Easter Egg: Konami Code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+
+            if (konamiCode.join('') === konamiSequence.join('')) {
+                showToast('🎮 Konami Code Activated! You found the easter egg!', 5000);
+                document.body.style.animation = 'rainbow 2s infinite';
+            }
+        });
+
+        // Rainbow animation for easter egg
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rainbow {
+                0% { filter: hue-rotate(0deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Console Easter Egg
+        console.log('%c👋 Hello Developer!', 'font-size: 20px; color: #6366f1; font-weight: bold;');
+        console.log('%cLooking at the code? I like your style! 😎', 'font-size: 14px; color: #8b5cf6;');
+        console.log('%cFeel free to reach out: nelianachieng319@gmail.com', 'font-size: 12px; color: #06b6d4;');
+
+        // Performance Optimization: Lazy Loading Images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                            imageObserver.unobserve(img);
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+
+        // Cursor Trail Effect (Optional - can be commented out)
+        const cursorTrail = [];
+        const maxTrailLength = 10;
+
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth > 768) { // Only on desktop
+                const trail = document.createElement('div');
+                trail.style.position = 'fixed';
+                trail.style.width = '8px';
+                trail.style.height = '8px';
+                trail.style.borderRadius = '50%';
+                trail.style.background = 'rgba(99, 102, 241, 0.3)';
+                trail.style.pointerEvents = 'none';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                trail.style.transition = 'all 0.3s ease';
+                trail.style.zIndex = '9999';
+                
+                document.body.appendChild(trail);
+                cursorTrail.push(trail);
+
+                setTimeout(() => {
+                    trail.style.opacity = '0';
+                    trail.style.transform = 'scale(2)';
+                }, 100);
+
+                setTimeout(() => {
+                    trail.remove();
+                    cursorTrail.shift();
+                }, 400);
+
+                if (cursorTrail.length > maxTrailLength) {
+                    cursorTrail[0].remove();
+                    cursorTrail.shift();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
